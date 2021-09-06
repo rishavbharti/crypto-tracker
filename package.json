@@ -1,0 +1,15 @@
+{
+  "name": "skillreactor_project",
+  "version": "1.0.0",
+  "description": "My first node project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git-codecommit.eu-west-2.amazonaws.com/v1/repos/SkrBootstrap-CryptoPortfolioTracker-rishav-UserCodeRepository"
+  },
+  "author": "Rishav Bharti",
+  "license": "ISC"
+}
