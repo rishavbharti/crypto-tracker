@@ -29,8 +29,11 @@ export default function Navbar() {
                             src={logo}
                             alt="Crypto Tracker logo"
                             className={classes.logo}
+                            id="logo"
                         />
-                        <Typography variant="h5">Trackin</Typography>
+                        <Typography variant="h5" id="company_name">
+                            Crypto Tracker
+                        </Typography>
                     </Toolbar>
                 </div>
             </AppBar>

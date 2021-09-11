@@ -12,7 +12,7 @@ import AssessmentIcon from "@material-ui/icons/Assessment";
 
 const useStyles = makeStyles({
     root: {
-        maxWidth: 245,
+        maxWidth: 345,
     },
 });
 
@@ -20,12 +20,13 @@ interface Props {
     icon: string;
     title: string;
     description: string;
+    className: string;
 }
 
 export default function InfoCard(props: Props) {
     const classes = useStyles();
 
-    const { title, description } = props;
+    const { title, description, className } = props;
 
     return (
         <Card className={classes.root}>
@@ -33,7 +34,12 @@ export default function InfoCard(props: Props) {
                 {/* <Icon fontSize="medium">{icon}</Icon> */}
                 <AssessmentIcon fontSize="large" />
                 <CardContent>
-                    <Typography gutterBottom variant="h6" component="h2">
+                    <Typography
+                        gutterBottom
+                        variant="h6"
+                        component="h2"
+                        className={className}
+                    >
                         {title}
                     </Typography>
                     <Typography

@@ -26,14 +26,13 @@ const Banner = () => {
     return (
         <header className={classes.container}>
             <div className={classes.leftSection}>
-                <h1>
-                    Get real time insights <br /> of your crypto investments
+                <h1 id="product_headline">
+                    Crypto Tracker: All your crypto in one place
                 </h1>
-                <p className={classes.description}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                <p className={classes.description} id="product_description">
+                    Crypto Tracker is a web app that allows you to easily manage
+                    your Crypto currency holdings in one place. Keep track of
+                    the prices and your profit/loss trends.
                 </p>
             </div>
             <div>

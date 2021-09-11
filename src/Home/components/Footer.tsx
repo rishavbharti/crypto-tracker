@@ -18,26 +18,35 @@ const Footer = () => {
         >
             <div />
             <div>
-                <p>Copyright &copy; Trackin</p>
+                <p id="copyright_notice">Copyright Crypto Tracker</p>
             </div>
-            <div>
-                <img
-                    src={LinkedinLogo}
-                    alt="Linkedin"
-                    style={{ height: "2rem", marginRight: "0.5rem" }}
-                />
+            <div id="sm_links">
+                <a href="https://skillreactor.io">
+                    <img
+                        src={LinkedinLogo}
+                        alt="Linkedin"
+                        style={{ height: "2rem", marginRight: "0.5rem" }}
+                        id="sm_linkedin"
+                    />
+                </a>
 
-                <img
-                    src={FacebookLogo}
-                    alt="Facebook"
-                    style={{ height: "2rem", marginRight: "0.5rem" }}
-                />
+                <a href="https://skillreactor.io">
+                    <img
+                        src={FacebookLogo}
+                        alt="Facebook"
+                        style={{ height: "2rem", marginRight: "0.5rem" }}
+                        id="sm_facebook"
+                    />
+                </a>
 
-                <img
-                    src={TwitterLogo}
-                    alt="Twitter"
-                    style={{ height: "2rem", marginRight: "0.5rem" }}
-                />
+                <a href="https://skillreactor.io">
+                    <img
+                        src={TwitterLogo}
+                        alt="Twitter"
+                        style={{ height: "2rem", marginRight: "0.5rem" }}
+                        id="sm_twitter"
+                    />
+                </a>
             </div>
         </footer>
     );
