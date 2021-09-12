@@ -6,7 +6,7 @@ import InfoCard from "../../components/InfoCard";
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        padding: "4rem 12rem",
+        padding: "4rem 12rem 2rem",
         background: "hsl(0, 0%, 98%)",
     },
     section: {
