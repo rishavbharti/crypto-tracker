@@ -55,7 +55,7 @@ export const handle = async (event: any, context: any) => {
         });
         // console.log("response => ", response);
     } catch (error) {
-        console.log("error => ", error);
+        // console.log("error => ", error);
 
         return {
             statusCode: 400,
@@ -73,8 +73,8 @@ export const handle = async (event: any, context: any) => {
     };
 };
 
-const registerUser = async (params: Params) => {
-    return await docClient.put(params, function (err, data) {
+const registerUser = (params: Params) => {
+    return docClient.put(params, function (err, data) {
         if (err) {
             return "Unable to register user.";
         } else {
