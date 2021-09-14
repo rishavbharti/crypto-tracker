@@ -18,6 +18,27 @@ type Params = {
     Item: User;
 };
 
+const registerUserCallback = (err: any, data: any) => {
+    if (err) {
+        console.error("Unable to register user.", JSON.stringify(err, null, 2));
+        return { statusCode: 503 };
+    } else {
+        console.log(
+            "User registered successfully.",
+            JSON.stringify(data, null, 2)
+        );
+        // return {
+        //     statusCode: 200,
+        //     headers: {
+        //         "Content-Type": "*/*",
+        //         "Access-Control-Allow-Origin": "*",
+        //         "Access-Control-Allow-Methods": "*",
+        //     },
+        //     body: JSON.stringify("User registered successfully."),
+        // };
+    }
+};
+
 export const handle = async (event: any, context: any) => {
     const { body, httpMethod } = event;
 
@@ -27,7 +48,7 @@ export const handle = async (event: any, context: any) => {
         };
     }
 
-    let userData: User, response;
+    let userData: User;
 
     try {
         userData = JSON.parse(body);
@@ -49,13 +70,15 @@ export const handle = async (event: any, context: any) => {
             .update(userData.password)
             .digest("hex");
 
-        response = await registerUser({
-            TableName: TABLE_NAME,
-            Item: userData,
-        });
-        // console.log("response => ", response);
+        registerUser(
+            {
+                TableName: TABLE_NAME,
+                Item: userData,
+            },
+            registerUserCallback
+        );
     } catch (error) {
-        // console.log("error => ", error);
+        console.log("error => ", error);
 
         return {
             statusCode: 400,
@@ -69,16 +92,13 @@ export const handle = async (event: any, context: any) => {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "*",
         },
-        body: JSON.stringify("Success"),
+        body: JSON.stringify("User registered successfully."),
     };
 };
 
-const registerUser = (params: Params) => {
-    return docClient.put(params, function (err, data) {
-        if (err) {
-            return "Unable to register user.";
-        } else {
-            return "User registered successfully.";
-        }
-    });
+const registerUser = (
+    params: Params,
+    callback: (err: any, data: any) => void
+) => {
+    docClient.put(params, callback);
 };
