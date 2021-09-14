@@ -18,25 +18,8 @@ type Params = {
     Item: User;
 };
 
-const registerUserCallback = (err: any, data: any) => {
-    if (err) {
-        console.error("Unable to register user.", JSON.stringify(err, null, 2));
-        return { statusCode: 503 };
-    } else {
-        console.log(
-            "User registered successfully.",
-            JSON.stringify(data, null, 2)
-        );
-        // return {
-        //     statusCode: 200,
-        //     headers: {
-        //         "Content-Type": "*/*",
-        //         "Access-Control-Allow-Origin": "*",
-        //         "Access-Control-Allow-Methods": "*",
-        //     },
-        //     body: JSON.stringify("User registered successfully."),
-        // };
-    }
+const registerUser = (params: Params) => {
+    return docClient.put(params).promise();
 };
 
 export const handle = async (event: any, context: any) => {
@@ -62,7 +45,9 @@ export const handle = async (event: any, context: any) => {
             !userData.hasOwnProperty("password") ||
             !userData.password
         ) {
-            throw new Error("Invalid request payload");
+            return {
+                statusCode: 400,
+            };
         }
 
         userData.password = crypto
@@ -70,23 +55,20 @@ export const handle = async (event: any, context: any) => {
             .update(userData.password)
             .digest("hex");
 
-        registerUser(
-            {
-                TableName: TABLE_NAME,
-                Item: userData,
-            },
-            registerUserCallback
-        );
+        await registerUser({
+            TableName: TABLE_NAME,
+            Item: userData,
+        });
     } catch (error) {
         console.log("error => ", error);
 
         return {
-            statusCode: 400,
+            statusCode: 503,
         };
     }
 
     return {
-        statusCode: 200,
+        statusCode: 201,
         headers: {
             "Content-Type": "*/*",
             "Access-Control-Allow-Origin": "*",
@@ -94,11 +76,4 @@ export const handle = async (event: any, context: any) => {
         },
         body: JSON.stringify("User registered successfully."),
     };
-};
-
-const registerUser = (
-    params: Params,
-    callback: (err: any, data: any) => void
-) => {
-    docClient.put(params, callback);
 };
