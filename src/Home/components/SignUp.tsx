@@ -5,6 +5,10 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 
+import { useAppSelector, useAppDispatch } from "app/hooks";
+
+import { signUp } from "redux/authUserSlice";
+
 const useStyles = makeStyles((theme) => ({
     container: {
         padding: "2rem 12rem",
@@ -21,9 +25,13 @@ const useStyles = makeStyles((theme) => ({
 const SignUp = () => {
     const classes = useStyles();
 
+    const authSate = useAppSelector((state) => state.auth);
+    const dispatch = useAppDispatch();
+
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -33,10 +41,34 @@ const SignUp = () => {
         if (name === "password") setPassword(value);
     };
 
+    const handleSignUpClick = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (!username || !email || !password) {
+            setErrorMessage(
+                "Error: Unable to signup, please fill all the details."
+            );
+
+            return;
+        }
+        dispatch(signUp({ username, email, password }));
+    };
+
     const renderForm = () => {
         return (
-            <form className={classes.form} noValidate>
+            <form
+                className={classes.form}
+                noValidate
+                onSubmit={handleSignUpClick}
+            >
                 <Grid container spacing={2}>
+                    {errorMessage && (
+                        <p
+                            id="signup_error"
+                            style={{ color: "red", fontSize: "0.8rem" }}
+                        >
+                            {errorMessage}
+                        </p>
+                    )}
                     <Grid item xs={12}>
                         <TextField
                             name="username"
@@ -85,6 +117,8 @@ const SignUp = () => {
                     color="primary"
                     id="signup_button"
                     className={classes.submit}
+                    disabled={authSate.status === "loading"}
+                    // onClick={handleSignUpClick}
                 >
                     Signup
                 </Button>
