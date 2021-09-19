@@ -5,9 +5,9 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 
-import { useAppSelector, useAppDispatch } from "app/hooks";
+import { useAppSelector } from "app/hooks";
 
-import { signUp } from "redux/authUserSlice";
+// import { signIn } from "redux/authUserSlice";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -22,14 +22,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const SignUp = () => {
+const SignIn = () => {
     const classes = useStyles();
 
     const authSate = useAppSelector((state) => state.auth);
-    const dispatch = useAppDispatch();
+    // const dispatch = useAppDispatch();
 
     const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -37,20 +36,19 @@ const SignUp = () => {
         const { name, value } = event.target;
 
         if (name === "username") setUsername(value);
-        if (name === "email") setEmail(value);
         if (name === "password") setPassword(value);
     };
 
-    const handleSignUpClick = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSignInClick = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!username || !email || !password) {
+        if (!username || !password) {
             setErrorMessage(
-                "Error: Unable to signup, please fill all the details."
+                "Error: Unable to signin, please fill all the details."
             );
 
             return;
         }
-        dispatch(signUp({ username, email, password }));
+        // dispatch(signIn({ username, password }));
     };
 
     const renderForm = () => {
@@ -58,12 +56,12 @@ const SignUp = () => {
             <form
                 className={classes.form}
                 noValidate
-                onSubmit={handleSignUpClick}
+                onSubmit={handleSignInClick}
             >
-                <Grid container spacing={2}>
+                <Grid container spacing={1}>
                     {errorMessage && (
                         <p
-                            id="signup_error"
+                            id="login_error"
                             style={{ color: "red", fontSize: "0.8rem" }}
                         >
                             {errorMessage}
@@ -77,22 +75,9 @@ const SignUp = () => {
                             variant="outlined"
                             required
                             fullWidth
-                            id="username_field"
+                            id="login_username_field"
                             label="Username"
                             autoFocus
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            variant="outlined"
-                            value={email}
-                            onChange={handleChange}
-                            required
-                            fullWidth
-                            id="email_field"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -105,7 +90,7 @@ const SignUp = () => {
                             name="password"
                             label="Password"
                             type="password"
-                            id="password_field"
+                            id="login_password_field"
                             autoComplete="current-password"
                         />
                     </Grid>
@@ -115,12 +100,11 @@ const SignUp = () => {
                     fullWidth
                     variant="contained"
                     color="primary"
-                    id="signup_button"
+                    id="login_button"
                     className={classes.submit}
                     disabled={authSate.status === "loading"}
-                    // onClick={handleSignUpClick}
                 >
-                    Signup
+                    Login
                 </Button>
             </form>
         );
@@ -128,12 +112,12 @@ const SignUp = () => {
 
     return (
         <section className={classes.container}>
-            <h2 style={{ margin: "1rem 0 2rem 0" }} id="registration_heading">
-                Registration
+            <h2 style={{ margin: "1rem 0 2rem 0" }} id="login_heading">
+                Login
             </h2>
             {renderForm()}
         </section>
     );
 };
 
-export default SignUp;
+export default SignIn;
