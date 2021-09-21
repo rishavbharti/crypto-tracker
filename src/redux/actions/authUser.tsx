@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { ACTION } from "../../types/index";
-import { registerUserUrl } from "../../services/url";
+import { API } from "../../services/url";
 
 export const authActions = {
     SIGN_UP_PENDING: "SIGN_UP_PENDING",
@@ -24,7 +24,7 @@ export const registerUser =
             };
 
             const { data } = await axios.post(
-                registerUserUrl,
+                API,
                 {
                     username,
                     email,

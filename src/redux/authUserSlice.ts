@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { registerUserUrl } from "services/url";
+import { API } from "services/url";
 
 export interface authState {
     status: "idle" | "loading" | "failed";
@@ -9,6 +9,11 @@ export interface authState {
 export interface signUpPayload {
     username: string;
     email: string;
+    password: string;
+}
+
+export interface logInPayload {
+    username: string;
     password: string;
 }
 
@@ -26,7 +31,7 @@ export const signUp = createAsyncThunk(
         };
 
         const { data } = await axios.post(
-            registerUserUrl,
+            `${API}/registration-service`,
             {
                 ...userData,
             },
@@ -34,6 +39,29 @@ export const signUp = createAsyncThunk(
         );
 
         return data;
+    }
+);
+
+export const logIn = createAsyncThunk(
+    "auth/logIn",
+    async (userData: logInPayload) => {
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        const response = await axios.post(
+            `${API}/login-service`,
+            {
+                ...userData,
+            },
+            config
+        );
+
+        console.log(response);
+
+        return response;
     }
 );
 
@@ -50,6 +78,15 @@ export const authSlice = createSlice({
                 state.status = "idle";
             })
             .addCase(signUp.rejected, (state, action) => {
+                state.status = "failed";
+            })
+            .addCase(logIn.pending, (state) => {
+                state.status = "loading";
+            })
+            .addCase(logIn.fulfilled, (state, action) => {
+                state.status = "idle";
+            })
+            .addCase(logIn.rejected, (state, action) => {
                 state.status = "failed";
             });
     },

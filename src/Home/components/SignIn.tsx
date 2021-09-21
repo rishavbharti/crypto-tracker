@@ -5,9 +5,9 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 
-import { useAppSelector } from "app/hooks";
+import { useAppSelector, useAppDispatch } from "app/hooks";
 
-// import { signIn } from "redux/authUserSlice";
+import { logIn } from "redux/authUserSlice";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -26,7 +26,7 @@ const SignIn = () => {
     const classes = useStyles();
 
     const authSate = useAppSelector((state) => state.auth);
-    // const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -43,12 +43,12 @@ const SignIn = () => {
         e.preventDefault();
         if (!username || !password) {
             setErrorMessage(
-                "Error: Unable to signin, please fill all the details."
+                "Error: Unable to login, please fill all the details."
             );
 
             return;
         }
-        // dispatch(signIn({ username, password }));
+        dispatch(logIn({ username, password }));
     };
 
     const renderForm = () => {
@@ -61,7 +61,7 @@ const SignIn = () => {
                 <Grid container spacing={1}>
                     {errorMessage && (
                         <p
-                            id="login_error"
+                            id='login_error'
                             style={{ color: "red", fontSize: "0.8rem" }}
                         >
                             {errorMessage}
@@ -69,38 +69,38 @@ const SignIn = () => {
                     )}
                     <Grid item xs={12}>
                         <TextField
-                            name="username"
+                            name='username'
                             value={username}
                             onChange={handleChange}
-                            variant="outlined"
+                            variant='outlined'
                             required
                             fullWidth
-                            id="login_username_field"
-                            label="Username"
+                            id='login_username_field'
+                            label='Username'
                             autoFocus
                         />
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            variant="outlined"
+                            variant='outlined'
                             value={password}
                             onChange={handleChange}
                             required
                             fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="login_password_field"
-                            autoComplete="current-password"
+                            name='password'
+                            label='Password'
+                            type='password'
+                            id='login_password_field'
+                            autoComplete='current-password'
                         />
                     </Grid>
                 </Grid>
                 <Button
-                    type="submit"
+                    type='submit'
                     fullWidth
-                    variant="contained"
-                    color="primary"
-                    id="login_button"
+                    variant='contained'
+                    color='primary'
+                    id='login_button'
                     className={classes.submit}
                     disabled={authSate.status === "loading"}
                 >
@@ -112,7 +112,7 @@ const SignIn = () => {
 
     return (
         <section className={classes.container}>
-            <h2 style={{ margin: "1rem 0 2rem 0" }} id="login_heading">
+            <h2 style={{ margin: "1rem 0 2rem 0" }} id='login_heading'>
                 Login
             </h2>
             {renderForm()}
