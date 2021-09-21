@@ -83,8 +83,6 @@ export const handle = async (event: any, context: any) => {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "*",
         },
-        body: JSON.stringify({
-            accessToken: token,
-        }),
+        body: token,
     };
 };
