@@ -72,7 +72,7 @@ export const handle = async (event: any, context: any) => {
         };
     }
 
-    const token = jwt.sign({ username }, TOKEN_KEY, {
+    const token = jwt.sign({ username: username }, TOKEN_KEY, {
         expiresIn: "2h",
     });
 
