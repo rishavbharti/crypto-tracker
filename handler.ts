@@ -58,6 +58,14 @@ export const handle = async (event: any, context: any) => {
     if (!response.Count) {
         return {
             statusCode: 401,
+            headers: {
+                "Content-Type": "*/*",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "*",
+            },
+            body: JSON.stringify({
+                error: "Error: Unable to login, user not found",
+            }),
         };
     }
 
@@ -69,6 +77,14 @@ export const handle = async (event: any, context: any) => {
     if (response.Items[0].password !== hashedPassword) {
         return {
             statusCode: 401,
+            headers: {
+                "Content-Type": "*/*",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "*",
+            },
+            body: JSON.stringify({
+                error: "Error: Unable to login, details do not match",
+            }),
         };
     }
 
