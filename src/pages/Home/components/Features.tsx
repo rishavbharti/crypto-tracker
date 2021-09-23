@@ -2,7 +2,7 @@ import React from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import InfoCard from "../../components/InfoCard";
+import InfoCard from "components/InfoCard";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -47,16 +47,16 @@ const Features = () => {
 
     return (
         <section className={classes.container}>
-            <h2 style={{ margin: "1rem 0 2rem 0" }} id="features_heading">
+            <h2 style={{ margin: "1rem 0 2rem 0" }} id='features_heading'>
                 Features
             </h2>
-            <div className={classes.section} id="features_list">
+            <div className={classes.section} id='features_list'>
                 {features.map(({ icon, title, description }) => (
                     <InfoCard
                         icon={icon}
                         title={title}
                         description={description}
-                        className="feature"
+                        className='feature'
                     />
                 ))}
             </div>

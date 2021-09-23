@@ -7,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 
 import { useAppSelector, useAppDispatch } from "app/hooks";
 
-import { logIn } from "redux/authUserSlice";
+import { signUp } from "redux/authUserSlice";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -22,13 +22,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const SignIn = () => {
+const SignUp = () => {
     const classes = useStyles();
 
     const authSate = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
 
     const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -36,19 +37,20 @@ const SignIn = () => {
         const { name, value } = event.target;
 
         if (name === "username") setUsername(value);
+        if (name === "email") setEmail(value);
         if (name === "password") setPassword(value);
     };
 
-    const handleSignInClick = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSignUpClick = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!username || !password) {
+        if (!username || !email || !password) {
             setErrorMessage(
-                "Error: Unable to login, please fill all the details."
+                "Error: Unable to signup, please fill all the details."
             );
 
             return;
         }
-        dispatch(logIn({ username, password }));
+        dispatch(signUp({ username, email, password }));
     };
 
     const renderForm = () => {
@@ -56,12 +58,12 @@ const SignIn = () => {
             <form
                 className={classes.form}
                 noValidate
-                onSubmit={handleSignInClick}
+                onSubmit={handleSignUpClick}
             >
-                <Grid container spacing={1}>
+                <Grid container spacing={2}>
                     {errorMessage && (
                         <p
-                            id='login_error'
+                            id='signup_error'
                             style={{ color: "red", fontSize: "0.8rem" }}
                         >
                             {errorMessage}
@@ -75,9 +77,21 @@ const SignIn = () => {
                             variant='outlined'
                             required
                             fullWidth
-                            id='login_username_field'
+                            id='username_field'
                             label='Username'
-                            autoFocus
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            variant='outlined'
+                            value={email}
+                            onChange={handleChange}
+                            required
+                            fullWidth
+                            id='email_field'
+                            label='Email Address'
+                            name='email'
+                            autoComplete='email'
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -90,7 +104,7 @@ const SignIn = () => {
                             name='password'
                             label='Password'
                             type='password'
-                            id='login_password_field'
+                            id='password_field'
                             autoComplete='current-password'
                         />
                     </Grid>
@@ -100,11 +114,11 @@ const SignIn = () => {
                     fullWidth
                     variant='contained'
                     color='primary'
-                    id='login_button'
+                    id='signup_button'
                     className={classes.submit}
                     disabled={authSate.status === "loading"}
                 >
-                    Login
+                    Signup
                 </Button>
             </form>
         );
@@ -112,12 +126,12 @@ const SignIn = () => {
 
     return (
         <section className={classes.container}>
-            <h2 style={{ margin: "1rem 0 2rem 0" }} id='login_heading'>
-                Login
+            <h2 style={{ margin: "1rem 0 2rem 0" }} id='registration_heading'>
+                Registration
             </h2>
             {renderForm()}
         </section>
     );
 };
 
-export default SignIn;
+export default SignUp;

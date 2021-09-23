@@ -5,7 +5,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 
-import logo from "../../assets/logo.png";
+import logo from "assets/logo.png";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -22,16 +22,16 @@ export default function Navbar() {
 
     return (
         <nav>
-            <AppBar position="static" color="transparent">
+            <AppBar position='static' color='transparent'>
                 <div className={classes.container}>
                     <Toolbar>
                         <img
                             src={logo}
-                            alt="Crypto Tracker logo"
+                            alt='Crypto Tracker logo'
                             className={classes.logo}
-                            id="logo"
+                            id='logo'
                         />
-                        <Typography variant="h5" id="company_name">
+                        <Typography variant='h5' id='company_name'>
                             Crypto Tracker
                         </Typography>
                     </Toolbar>

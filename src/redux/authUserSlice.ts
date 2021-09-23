@@ -4,6 +4,8 @@ import { API } from "services/url";
 
 export interface authState {
     status: "idle" | "loading" | "failed";
+    errorMessage: string;
+    isAuthenticated: boolean;
 }
 
 export interface signUpPayload {
@@ -19,6 +21,8 @@ export interface logInPayload {
 
 const initialState: authState = {
     status: "idle",
+    errorMessage: "",
+    isAuthenticated: Boolean(localStorage.getItem("accessToken")),
 };
 
 export const signUp = createAsyncThunk(
@@ -30,7 +34,7 @@ export const signUp = createAsyncThunk(
             },
         };
 
-        const { data } = await axios.post(
+        const response = await axios.post(
             `${API}/registration-service`,
             {
                 ...userData,
@@ -38,7 +42,7 @@ export const signUp = createAsyncThunk(
             config
         );
 
-        return data;
+        return response;
     }
 );
 
@@ -58,8 +62,6 @@ export const logIn = createAsyncThunk(
             },
             config
         );
-
-        console.log(response);
 
         return response;
     }
@@ -84,9 +86,17 @@ export const authSlice = createSlice({
                 state.status = "loading";
             })
             .addCase(logIn.fulfilled, (state, action) => {
+                const { payload } = action;
                 state.status = "idle";
+                window.localStorage.setItem("accessToken", payload.data);
+                state.isAuthenticated = true;
+                state.errorMessage = "";
+
+                window.location.replace("/#/dashboard/");
             })
             .addCase(logIn.rejected, (state, action) => {
+                state.errorMessage =
+                    "Error: Unable to login, details do not match";
                 state.status = "failed";
             });
     },

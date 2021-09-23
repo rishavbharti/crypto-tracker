@@ -1,17 +1,23 @@
 import React from "react";
+import { Route, Switch } from "react-router-dom";
 
-import Home from "./Home";
+import Navbar from "components/Navbar";
+import ProtectedRoute from "components/ProtectedRoute";
+
+import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
 
 import "./App.css";
 
 function App() {
     return (
-        <div className="App">
-            <Home />
-            {/* <header className="App-header">
-        Welcome to SkillReactor!
-      </header> */}
-        </div>
+        <>
+            <Navbar />
+            <Switch>
+                <Route path='/' component={Home} exact />
+                <ProtectedRoute path='/dashboard' component={Dashboard} />
+            </Switch>
+        </>
     );
 }
 

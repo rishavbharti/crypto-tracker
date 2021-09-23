@@ -2,7 +2,7 @@ import React from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import Banner1 from "../../assets/banner_1.svg";
+import Banner1 from "assets/banner_1.svg";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -26,17 +26,17 @@ const Banner = () => {
     return (
         <header className={classes.container}>
             <div className={classes.leftSection}>
-                <h1 id="product_headline">
+                <h1 id='product_headline'>
                     Crypto Tracker: All your crypto in one place
                 </h1>
-                <p className={classes.description} id="product_description">
+                <p className={classes.description} id='product_description'>
                     Crypto Tracker is a web app that allows you to easily manage
                     your Crypto currency holdings in one place. Keep track of
                     the prices and your profit/loss trends.
                 </p>
             </div>
             <div>
-                <img src={Banner1} alt="banner" />
+                <img src={Banner1} alt='banner' />
             </div>
         </header>
     );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -7,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 
 import { useAppSelector, useAppDispatch } from "app/hooks";
 
-import { signUp } from "redux/authUserSlice";
+import { logIn } from "redux/authUserSlice";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -22,35 +22,38 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const SignUp = () => {
+const SignIn = () => {
     const classes = useStyles();
 
-    const authSate = useAppSelector((state) => state.auth);
+    const authState = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
 
     const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+
+    useEffect(() => {
+        setErrorMessage(authState.errorMessage);
+    }, [authState.errorMessage]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
 
         if (name === "username") setUsername(value);
-        if (name === "email") setEmail(value);
         if (name === "password") setPassword(value);
     };
 
-    const handleSignUpClick = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSignInClick = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!username || !email || !password) {
+        if (!username || !password) {
             setErrorMessage(
-                "Error: Unable to signup, please fill all the details."
+                "Error: Unable to login, please fill all the details."
             );
 
             return;
         }
-        dispatch(signUp({ username, email, password }));
+        dispatch(logIn({ username, password }));
+        setErrorMessage("");
     };
 
     const renderForm = () => {
@@ -58,12 +61,12 @@ const SignUp = () => {
             <form
                 className={classes.form}
                 noValidate
-                onSubmit={handleSignUpClick}
+                onSubmit={handleSignInClick}
             >
-                <Grid container spacing={2}>
+                <Grid container spacing={1}>
                     {errorMessage && (
                         <p
-                            id="signup_error"
+                            id='login_error'
                             style={{ color: "red", fontSize: "0.8rem" }}
                         >
                             {errorMessage}
@@ -71,56 +74,40 @@ const SignUp = () => {
                     )}
                     <Grid item xs={12}>
                         <TextField
-                            name="username"
+                            name='username'
                             value={username}
                             onChange={handleChange}
-                            variant="outlined"
+                            variant='outlined'
                             required
                             fullWidth
-                            id="username_field"
-                            label="Username"
-                            autoFocus
+                            id='login_username_field'
+                            label='Username'
                         />
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            variant="outlined"
-                            value={email}
-                            onChange={handleChange}
-                            required
-                            fullWidth
-                            id="email_field"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            variant="outlined"
+                            variant='outlined'
                             value={password}
                             onChange={handleChange}
                             required
                             fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password_field"
-                            autoComplete="current-password"
+                            name='password'
+                            label='Password'
+                            type='password'
+                            id='login_password_field'
                         />
                     </Grid>
                 </Grid>
                 <Button
-                    type="submit"
+                    type='submit'
                     fullWidth
-                    variant="contained"
-                    color="primary"
-                    id="signup_button"
+                    variant='contained'
+                    color='primary'
+                    id='login_button'
                     className={classes.submit}
-                    disabled={authSate.status === "loading"}
-                    // onClick={handleSignUpClick}
+                    disabled={authState.status === "loading"}
                 >
-                    Signup
+                    Login
                 </Button>
             </form>
         );
@@ -128,12 +115,12 @@ const SignUp = () => {
 
     return (
         <section className={classes.container}>
-            <h2 style={{ margin: "1rem 0 2rem 0" }} id="registration_heading">
-                Registration
+            <h2 style={{ margin: "1rem 0 2rem 0" }} id='login_heading'>
+                Login
             </h2>
             {renderForm()}
         </section>
     );
 };
 
-export default SignUp;
+export default SignIn;
