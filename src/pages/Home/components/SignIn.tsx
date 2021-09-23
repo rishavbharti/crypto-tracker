@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SignIn = () => {
     const classes = useStyles();
+    let history = useHistory();
 
     const authState = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
@@ -31,6 +33,12 @@ const SignIn = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+
+    useEffect(() => {
+        if (authState.isAuthenticated) {
+            history.push("/dashboard");
+        }
+    }, [history, authState.isAuthenticated]);
 
     useEffect(() => {
         setErrorMessage(authState.errorMessage);

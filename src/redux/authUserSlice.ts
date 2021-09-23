@@ -92,7 +92,7 @@ export const authSlice = createSlice({
                 state.isAuthenticated = true;
                 state.errorMessage = "";
 
-                window.location.replace("/#/dashboard/");
+                // window.location.replace("/#/dashboard/");
             })
             .addCase(logIn.rejected, (state, action) => {
                 state.errorMessage =
