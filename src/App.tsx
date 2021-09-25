@@ -1,5 +1,7 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route, Switch, useHistory } from "react-router-dom";
+
+import { useAppSelector } from "app/hooks";
 
 import Navbar from "components/Navbar";
 import ProtectedRoute from "components/ProtectedRoute";
@@ -10,6 +12,16 @@ import Dashboard from "./pages/Dashboard";
 import "./App.css";
 
 function App() {
+    let history = useHistory();
+
+    const authState = useAppSelector((state) => state.auth);
+
+    useEffect(() => {
+        if (authState.isAuthenticated) {
+            history.push("/dashboard");
+        }
+    }, [history, authState.isAuthenticated]);
+
     return (
         <>
             <Navbar />
