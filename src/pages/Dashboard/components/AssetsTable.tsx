@@ -35,7 +35,7 @@ export default function AssetsTable() {
     ];
 
     return (
-        <TableContainer component={Paper} style={{ width: "80%" }}>
+        <TableContainer component={Paper}>
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
