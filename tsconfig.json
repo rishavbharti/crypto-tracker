@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "noImplicitAny": true,
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "sourceMap": true,
+      "rootDir": "./",
+      "outDir": ".build"
+    },
+    "files": [
+      "handler.ts"
+    ],
+    "exclude": ["node_modules"]
+}
