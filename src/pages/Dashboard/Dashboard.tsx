@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 
 import Container from "@material-ui/core/Container";
-
-import AssetsTable from "./components/AssetsTable";
 import { Button, Grid, TextField } from "@material-ui/core";
 
+import AssetsTable from "./components/AssetsTable";
+
+import { useAppSelector, useAppDispatch } from "app/hooks";
+import { addAsset } from "redux/assetsSlice";
+
 const Dashboard = () => {
+    const assetsState = useAppSelector((state) => state.assets);
+    const dispatch = useAppDispatch();
+
     const [token, setToken] = useState("");
     const [quantity, setQuantity] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -18,21 +25,33 @@ const Dashboard = () => {
 
     const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!token || !quantity) {
+            setErrorMessage("Error: Please fill all the details");
 
-        // dispatch(addAsset({ token, quantity }));
+            return;
+        }
+        dispatch(addAsset({ token, quantity: +quantity }));
+        setErrorMessage("");
     };
 
     const renderAddAssetForm = () => {
         return (
             <div style={{ marginTop: "-1.5rem" }}>
                 <h3>Add asset</h3>
+                {errorMessage && (
+                    <p
+                        id='add_asset_error'
+                        style={{ color: "red", fontSize: "0.8rem" }}
+                    >
+                        {errorMessage}
+                    </p>
+                )}
                 <form onSubmit={handleSave}>
                     <TextField
                         name='token'
                         value={token}
                         onChange={handleChange}
                         variant='outlined'
-                        required
                         fullWidth
                         id='dashboard_token'
                         label='Token'
@@ -43,7 +62,6 @@ const Dashboard = () => {
                         variant='outlined'
                         value={quantity}
                         onChange={handleChange}
-                        required
                         fullWidth
                         inputProps={{
                             inputMode: "numeric",
@@ -51,7 +69,6 @@ const Dashboard = () => {
                         }}
                         label='Quantity'
                         id='dashboard_quantity'
-                        // helperText='Please enter a number'
                         margin='normal'
                     />
 
@@ -61,7 +78,7 @@ const Dashboard = () => {
                         variant='contained'
                         color='primary'
                         id='dashboard_add_button'
-                        // disabled={assets.add.status === "loading"}
+                        disabled={assetsState.add.status === "loading"}
                     >
                         Add Asset
                     </Button>

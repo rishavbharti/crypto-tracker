@@ -43,6 +43,7 @@ export default function AssetsTable() {
                             <TableCell
                                 align={index === 0 ? "left" : "right"}
                                 className='table_heading'
+                                key={index}
                             >
                                 {column}
                             </TableCell>

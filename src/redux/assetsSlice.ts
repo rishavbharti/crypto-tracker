@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API } from "services/url";
+import { parseJwt, config } from "utils";
 
 export interface assetsState {
     assets: {
@@ -30,23 +31,26 @@ const initialState: assetsState = {
 };
 
 export const addAsset = createAsyncThunk(
-    "assets/new",
+    "assets/add",
     async (asset: assetPayload) => {
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        };
+        const username = parseJwt(
+            localStorage.getItem("accessToken")
+        )?.username;
+
+        if (!username) {
+            throw new Error("Invalid token");
+        }
 
         const response = await axios.post(
-            `${API}/save-crypto-service`,
+            `${API}/assets-service`,
             {
+                username: username,
                 ...asset,
             },
             config
         );
 
-        return response;
+        return response?.data;
     }
 );
 
