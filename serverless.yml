@@ -22,9 +22,9 @@ custom:
   serverless-offline:
 
 functions:
-  hello:
+  saveAsset:
     events:
       - http:
-          method: any
-          path: /handler
-    handler: handler.handle
+          method: post
+          path: /assets
+    handler: handler.saveAsset
