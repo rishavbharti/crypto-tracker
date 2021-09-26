@@ -18,7 +18,7 @@ function response(statusCode: number, message: any) {
     };
 }
 
-export const saveAsset = async (event: any, context: any) => {
+export const handle = async (event: any, context: any) => {
     const { body } = event;
     const reqBody = JSON.parse(body);
 

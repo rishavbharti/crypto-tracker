@@ -26,5 +26,5 @@ functions:
     events:
       - http:
           method: post
-          path: /assets
-    handler: handler.saveAsset
+          path: /handler
+    handler: handler.handle
