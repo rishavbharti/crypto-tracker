@@ -45,9 +45,11 @@ export const handle = async (event: any, context: any) => {
             if (Count === 0 || !Items[0].assets) {
                 responseData = [];
             } else {
-                responseData = Object.entries(Items[0].assets).map((asset) => {
-                    return { token: asset[0], ...asset[1] };
-                });
+                responseData = Object.entries(Items[0].assets).map(
+                    (asset: any[]) => {
+                        return { token: asset[0], ...asset[1] };
+                    }
+                );
             }
 
             return response(200, responseData);
