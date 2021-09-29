@@ -77,10 +77,10 @@ export const handle = async (event: any, context: any) => {
                         return {
                             token: asset,
                             quantity: assetName["quantity"],
-                            price: assetId["usd"].toFixed(2),
-                            totalValue: (
+                            totalValue: Math.round(
                                 assetId["usd"] * assetName["quantity"]
-                            ).toFixed(2),
+                            ),
+                            price: assetId["usd"].toFixed(2),
                         };
                     });
 
@@ -91,10 +91,9 @@ export const handle = async (event: any, context: any) => {
 
                     responseData.forEach(
                         (asset) =>
-                            (asset.allocation = (
-                                (asset.totalValue / totalAssetValue) *
-                                100
-                            ).toFixed(2))
+                            (asset.allocation = Math.round(
+                                (asset.totalValue / totalAssetValue) * 100
+                            ))
                     );
 
                     return response(200, responseData);
