@@ -1,8 +1,10 @@
 import * as aws from "aws-sdk";
+const CoinGecko = require("coingecko-api");
 
 aws.config.loadFromPath("./config.json");
 
 var docClient = new aws.DynamoDB.DocumentClient();
+const CoinGeckoClient = new CoinGecko();
 
 const TABLE_NAME = "SkrBootstrap-CryptoPortfolioTracker-rishav-UserTable";
 
@@ -16,6 +18,14 @@ function response(statusCode: number, message: any) {
         },
         body: JSON.stringify(message),
     };
+}
+
+async function fetchCoinsPrice(assets: any) {
+    const assetIds = Object.keys(assets).map((asset) =>
+        asset.toLowerCase().replace(/\s+/g, "-")
+    );
+
+    return await CoinGeckoClient.simple.price({ ids: assetIds });
 }
 
 export const handle = async (event: any, context: any) => {
@@ -35,24 +45,61 @@ export const handle = async (event: any, context: any) => {
         },
     };
 
+    // let coinsData = await CoinGeckoClient.coins.list();
+
     return docClient
         .query(params)
         .promise()
         .then((res) => {
             const { Count, Items } = res;
-            let responseData;
+            let responseData: any[] = [];
 
             if (Count === 0 || !Items[0].assets) {
                 responseData = [];
             } else {
-                responseData = Object.entries(Items[0].assets).map(
-                    (asset: any[]) => {
-                        return { token: asset[0], ...asset[1] };
-                    }
-                );
-            }
+                const assets = Items[0].assets;
 
-            return response(200, responseData);
+                let assetNameIdMapping: any = {};
+
+                Object.keys(assets).forEach((asset) => {
+                    const id = asset.toLowerCase().replace(/\s+/g, "-");
+                    assetNameIdMapping[id] = asset;
+                    assetNameIdMapping[asset] = id;
+                });
+
+                return fetchCoinsPrice(assets).then((res) => {
+                    let coinsPrice = res.data;
+
+                    responseData = Object.keys(assets).map((asset) => {
+                        const assetName = assets[asset];
+                        const assetId = coinsPrice[assetNameIdMapping[asset]]; // Get id based on name
+
+                        return {
+                            token: asset,
+                            quantity: assetName["quantity"],
+                            price: assetId["usd"].toFixed(2),
+                            totalValue: (
+                                assetId["usd"] * assetName["quantity"]
+                            ).toFixed(2),
+                        };
+                    });
+
+                    const totalAssetValue = responseData.reduce(
+                        (sum, asset) => sum + +asset.totalValue,
+                        0
+                    );
+
+                    responseData.forEach(
+                        (asset) =>
+                            (asset.allocation = (
+                                (asset.totalValue / totalAssetValue) *
+                                100
+                            ).toFixed(2))
+                    );
+
+                    return response(200, responseData);
+                });
+            }
         })
         .catch((err) => {
             console.log(err);

@@ -1,15 +1,14 @@
 {
     "compilerOptions": {
-      "module": "commonjs",
-      "noImplicitAny": true,
-      "removeComments": true,
-      "preserveConstEnums": true,
-      "sourceMap": true,
-      "rootDir": "./",
-      "outDir": ".build"
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "rootDir": "./",
+        "outDir": ".build",
+        "lib": ["ESNext.String"]
     },
-    "files": [
-      "handler.ts"
-    ],
+    "files": ["handler.ts"],
     "exclude": ["node_modules"]
 }
