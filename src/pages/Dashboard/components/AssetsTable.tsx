@@ -70,13 +70,13 @@ export default function AssetsTable() {
                                 </TableCell>
 
                                 <TableCell className='table_data' align='right'>
-                                    {datum?.["price"]}
+                                    ${datum?.["price"]}
                                 </TableCell>
                                 <TableCell className='table_data' align='right'>
-                                    {datum?.["total_value"]}
+                                    ${datum?.["totalValue"]}
                                 </TableCell>
                                 <TableCell className='table_data' align='right'>
-                                    {datum?.["allocation"]}
+                                    {datum?.["allocation"]}%
                                 </TableCell>
                             </TableRow>
                         ))}
