@@ -92,7 +92,7 @@ export default function AssetsTable(props: any) {
                                         )
                                     }
                                 >
-                                    edit
+                                    Edit
                                 </TableCell>
                                 <TableCell
                                     className='delete_button'
