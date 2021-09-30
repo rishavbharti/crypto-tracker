@@ -78,15 +78,14 @@ export default function AssetsTable(props: any) {
                                 <TableCell className='table_data' align='right'>
                                     {datum?.["allocation"]}%
                                 </TableCell>
-                                <TableCell
-                                    align='center'
+                                <div
                                     style={{
                                         cursor: "pointer",
                                         display: "flex",
                                         justifyContent: "space-between",
                                     }}
                                 >
-                                    <td
+                                    <TableCell
                                         className='delete_button'
                                         onClick={() =>
                                             dispatch(
@@ -98,8 +97,8 @@ export default function AssetsTable(props: any) {
                                         }
                                     >
                                         delete
-                                    </td>
-                                    <td
+                                    </TableCell>
+                                    <TableCell
                                         className='edit_button'
                                         onClick={() =>
                                             handleEditClick(
@@ -109,8 +108,8 @@ export default function AssetsTable(props: any) {
                                         }
                                     >
                                         edit
-                                    </td>
-                                </TableCell>
+                                    </TableCell>
+                                </div>
                             </TableRow>
                         ))}
                     </TableBody>
