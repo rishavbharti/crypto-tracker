@@ -21,7 +21,9 @@ const columns = [
     "Actions",
 ];
 
-export default function AssetsTable() {
+export default function AssetsTable(props: any) {
+    const { handleEditClick } = props;
+
     const {
         assets: { status, data },
         add,
@@ -36,7 +38,7 @@ export default function AssetsTable() {
         if (add.status === "success") {
             dispatch(fetchAssets());
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [add.status]);
 
     const renderTable = () => {
@@ -77,19 +79,37 @@ export default function AssetsTable() {
                                     {datum?.["allocation"]}%
                                 </TableCell>
                                 <TableCell
-                                    className='delete_button'
-                                    align='right'
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() =>
-                                        dispatch(
-                                            deleteAsset({
-                                                token: datum["token"],
-                                                index: index,
-                                            })
-                                        )
-                                    }
+                                    align='center'
+                                    style={{
+                                        cursor: "pointer",
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                    }}
                                 >
-                                    delete
+                                    <td
+                                        className='delete_button'
+                                        onClick={() =>
+                                            dispatch(
+                                                deleteAsset({
+                                                    token: datum["token"],
+                                                    index: index,
+                                                })
+                                            )
+                                        }
+                                    >
+                                        delete
+                                    </td>
+                                    <td
+                                        className='edit_button'
+                                        onClick={() =>
+                                            handleEditClick(
+                                                datum["token"],
+                                                datum["quantity"]
+                                            )
+                                        }
+                                    >
+                                        edit
+                                    </td>
                                 </TableCell>
                             </TableRow>
                         ))}

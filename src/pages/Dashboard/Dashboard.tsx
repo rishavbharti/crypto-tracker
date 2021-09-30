@@ -15,6 +15,13 @@ const Dashboard = () => {
     const [token, setToken] = useState("");
     const [quantity, setQuantity] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [mode, setMode] = useState("Add");
+
+    function handleEditClick(_token: string, _quantity: string) {
+        setToken(_token);
+        setQuantity(_quantity);
+        setMode("Save");
+    }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -77,10 +84,10 @@ const Dashboard = () => {
                         fullWidth
                         variant='contained'
                         color='primary'
-                        id='dashboard_add_button'
+                        id={`dashboard_${mode.toLowerCase()}_button`}
                         disabled={assetsState.add.status === "loading"}
                     >
-                        Add Asset
+                        {mode} Asset
                     </Button>
                 </form>
             </div>
@@ -92,7 +99,7 @@ const Dashboard = () => {
             <h2 id='dashboard_heading'>Dashboard</h2>
             <Grid container spacing={5}>
                 <Grid item xs={12} sm={8}>
-                    <AssetsTable />
+                    <AssetsTable handleEditClick={handleEditClick} />
                 </Grid>
                 <Grid item xs={12} sm={4}>
                     {renderAddAssetForm()}
