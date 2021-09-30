@@ -45,9 +45,9 @@ const initialState: assetsState = {
     },
 };
 
-const username = parseJwt(localStorage.getItem("accessToken"))?.username;
-
 export const fetchAssets = createAsyncThunk("assets/fetch", async () => {
+    const username = parseJwt(localStorage.getItem("accessToken"))?.username;
+
     if (!username) {
         throw new Error("Invalid token");
     }
@@ -63,6 +63,10 @@ export const fetchAssets = createAsyncThunk("assets/fetch", async () => {
 export const addAsset = createAsyncThunk(
     "assets/add",
     async (asset: addAssetPayload) => {
+        const username = parseJwt(
+            localStorage.getItem("accessToken")
+        )?.username;
+
         if (!username) {
             throw new Error("Invalid token");
         }
@@ -83,6 +87,10 @@ export const addAsset = createAsyncThunk(
 export const deleteAsset = createAsyncThunk(
     "assets/delete",
     async (asset: deleteAssetPayload) => {
+        const username = parseJwt(
+            localStorage.getItem("accessToken")
+        )?.username;
+
         if (!username) {
             throw new Error("Invalid token");
         }
