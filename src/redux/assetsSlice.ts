@@ -10,14 +10,23 @@ export interface assetsState {
         errorMessage: string;
     };
     add: {
+        status: "idle" | "loading" | "success" | "failed";
+        errorMessage: string;
+    };
+    delete: {
         status: "idle" | "loading" | "failed";
         errorMessage: string;
     };
 }
 
-export interface assetPayload {
+export interface addAssetPayload {
     token: string;
     quantity: number;
+}
+
+export interface deleteAssetPayload {
+    token: string;
+    index: number;
 }
 
 const initialState: assetsState = {
@@ -30,11 +39,15 @@ const initialState: assetsState = {
         status: "idle",
         errorMessage: "",
     },
+    delete: {
+        status: "idle",
+        errorMessage: "",
+    },
 };
 
-export const fetchAssets = createAsyncThunk("assets/fetch", async () => {
-    const username = parseJwt(localStorage.getItem("accessToken"))?.username;
+const username = parseJwt(localStorage.getItem("accessToken"))?.username;
 
+export const fetchAssets = createAsyncThunk("assets/fetch", async () => {
     if (!username) {
         throw new Error("Invalid token");
     }
@@ -49,11 +62,7 @@ export const fetchAssets = createAsyncThunk("assets/fetch", async () => {
 
 export const addAsset = createAsyncThunk(
     "assets/add",
-    async (asset: assetPayload) => {
-        const username = parseJwt(
-            localStorage.getItem("accessToken")
-        )?.username;
-
+    async (asset: addAssetPayload) => {
         if (!username) {
             throw new Error("Invalid token");
         }
@@ -68,6 +77,27 @@ export const addAsset = createAsyncThunk(
         );
 
         return response?.data;
+    }
+);
+
+export const deleteAsset = createAsyncThunk(
+    "assets/delete",
+    async (asset: deleteAssetPayload) => {
+        if (!username) {
+            throw new Error("Invalid token");
+        }
+
+        await axios.post(
+            `${API}/assets-service`,
+            {
+                username: username,
+                token: asset.token,
+                action: "DELETE",
+            },
+            config
+        );
+
+        return asset.index;
     }
 );
 
@@ -93,19 +123,22 @@ export const assetsSlice = createSlice({
                 state.add.status = "loading";
             })
             .addCase(addAsset.fulfilled, (state, action) => {
-                const {
-                    payload: { assets },
-                } = action;
-
-                const _assets = Object.entries(assets).map((asset: any[]) => {
-                    return { token: asset[0], ...asset[1] };
-                });
-
-                state.add.status = "idle";
-                state.assets.data = _assets;
+                state.add.status = "success";
             })
             .addCase(addAsset.rejected, (state, action) => {
                 state.add.status = "failed";
+            })
+
+            .addCase(deleteAsset.pending, (state) => {
+                state.delete.status = "loading";
+            })
+            .addCase(deleteAsset.fulfilled, (state, action) => {
+                const { payload } = action;
+                state.delete.status = "idle";
+                state.assets.data.splice(payload, 1);
+            })
+            .addCase(deleteAsset.rejected, (state, action) => {
+                state.delete.status = "failed";
             });
     },
 });

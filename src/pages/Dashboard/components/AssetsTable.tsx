@@ -9,14 +9,22 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
 import { useAppSelector, useAppDispatch } from "app/hooks";
-import { fetchAssets } from "redux/assetsSlice";
+import { fetchAssets, deleteAsset } from "redux/assetsSlice";
 import { CircularProgress } from "@material-ui/core";
 
-const columns = ["Token", "Qty. Owned", "Price", "Total Value", "Allocation"];
+const columns = [
+    "Token",
+    "Qty. Owned",
+    "Price",
+    "Total Value",
+    "Allocation",
+    "Actions",
+];
 
 export default function AssetsTable() {
     const {
         assets: { status, data },
+        add,
     } = useAppSelector((state) => state.assets);
     const dispatch = useAppDispatch();
 
@@ -24,22 +32,12 @@ export default function AssetsTable() {
         dispatch(fetchAssets());
     }, [dispatch]);
 
-    // const data = [
-    //     {
-    //         token: "BTC",
-    //         qty: 0.5,
-    //         price: 10000,
-    //         total_value: 5000,
-    //         allocation: "50%",
-    //     },
-    //     {
-    //         token: "ETH",
-    //         qty: 25,
-    //         price: 200,
-    //         total_value: 5000,
-    //         allocation: "50%",
-    //     },
-    // ];
+    useEffect(() => {
+        if (add.status === "success") {
+            dispatch(fetchAssets());
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [add.status]);
 
     const renderTable = () => {
         return (
@@ -60,7 +58,7 @@ export default function AssetsTable() {
                     </TableHead>
 
                     <TableBody>
-                        {data.map((datum) => (
+                        {data.map((datum, index) => (
                             <TableRow key={datum["token"]}>
                                 <TableCell className='table_data' scope='row'>
                                     {datum["token"]}
@@ -77,6 +75,21 @@ export default function AssetsTable() {
                                 </TableCell>
                                 <TableCell className='table_data' align='right'>
                                     {datum?.["allocation"]}%
+                                </TableCell>
+                                <TableCell
+                                    className='delete_button'
+                                    align='right'
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() =>
+                                        dispatch(
+                                            deleteAsset({
+                                                token: datum["token"],
+                                                index: index,
+                                            })
+                                        )
+                                    }
+                                >
+                                    delete
                                 </TableCell>
                             </TableRow>
                         ))}
