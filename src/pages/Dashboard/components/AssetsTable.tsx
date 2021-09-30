@@ -78,6 +78,22 @@ export default function AssetsTable(props: any) {
                                 <TableCell className='table_data' align='right'>
                                     {datum?.["allocation"]}%
                                 </TableCell>
+
+                                <TableCell
+                                    align='right'
+                                    className='edit_button'
+                                    style={{
+                                        cursor: "pointer",
+                                    }}
+                                    onClick={() =>
+                                        handleEditClick(
+                                            datum["token"],
+                                            datum["quantity"]
+                                        )
+                                    }
+                                >
+                                    edit
+                                </TableCell>
                                 <TableCell
                                     className='delete_button'
                                     style={{
@@ -93,20 +109,6 @@ export default function AssetsTable(props: any) {
                                     }
                                 >
                                     delete
-                                </TableCell>
-                                <TableCell
-                                    className='edit_button'
-                                    style={{
-                                        cursor: "pointer",
-                                    }}
-                                    onClick={() =>
-                                        handleEditClick(
-                                            datum["token"],
-                                            datum["quantity"]
-                                        )
-                                    }
-                                >
-                                    edit
                                 </TableCell>
                             </TableRow>
                         ))}
