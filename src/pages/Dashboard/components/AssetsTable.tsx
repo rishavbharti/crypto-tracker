@@ -78,38 +78,36 @@ export default function AssetsTable(props: any) {
                                 <TableCell className='table_data' align='right'>
                                     {datum?.["allocation"]}%
                                 </TableCell>
-                                <div
+                                <TableCell
+                                    className='delete_button'
                                     style={{
                                         cursor: "pointer",
-                                        display: "flex",
-                                        justifyContent: "space-between",
                                     }}
+                                    onClick={() =>
+                                        dispatch(
+                                            deleteAsset({
+                                                token: datum["token"],
+                                                index: index,
+                                            })
+                                        )
+                                    }
                                 >
-                                    <TableCell
-                                        className='delete_button'
-                                        onClick={() =>
-                                            dispatch(
-                                                deleteAsset({
-                                                    token: datum["token"],
-                                                    index: index,
-                                                })
-                                            )
-                                        }
-                                    >
-                                        delete
-                                    </TableCell>
-                                    <TableCell
-                                        className='edit_button'
-                                        onClick={() =>
-                                            handleEditClick(
-                                                datum["token"],
-                                                datum["quantity"]
-                                            )
-                                        }
-                                    >
-                                        edit
-                                    </TableCell>
-                                </div>
+                                    delete
+                                </TableCell>
+                                <TableCell
+                                    className='edit_button'
+                                    style={{
+                                        cursor: "pointer",
+                                    }}
+                                    onClick={() =>
+                                        handleEditClick(
+                                            datum["token"],
+                                            datum["quantity"]
+                                        )
+                                    }
+                                >
+                                    edit
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
